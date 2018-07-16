@@ -1,4 +1,4 @@
-# scraping-data-from-basketball-reference
+# Tools for Scraping Data from Basketball Reference
 
 ## ``get_all_players.py``
 - gets a list of all players and their basic information (name, years in the league, position, height, weight, birthday, college, url, active player, hall of fame status) from https://www.basketball-reference.com/players/
