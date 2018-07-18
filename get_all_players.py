@@ -6,15 +6,13 @@ from datetime import datetime
 
 import argparse
 import multiprocessing
-import numpy as np
 import pandas as pd
-import re
 import requests
 import string
 
 def arg_parser():
     parser=argparse.ArgumentParser(description='gathers a list all past and present NBA players from Basketball Reference')
-    parser.add_argument('-t','--tag',default='list_of_all_players_'+datetime.today().strftime('%Y-%m-%d')+'.csv',help='filename for saved csv')
+    parser.add_argument('-t','--tag',default='all_players_'+datetime.today().strftime('%Y-%m-%d')+'.csv',help='filename for saved csv')
     return(parser)
 
 def clean_row(i,stats):
@@ -56,12 +54,12 @@ def get_data():
     for i in range(1,len(results)):
         OUT=pd.concat([OUT,pd.DataFrame(results[i])])
     OUT.columns=['Player','From','To','Pos','Ht','Wt','Birth Date','Colleges','url','is_active','in_hof']
-    return(OUT)
+    return(OUT.reset_index(drop=True))
 
 def main():
     ap=arg_parser()
     args=ap.parse_args()
-    get_data().to_csv(args.tag,index=False)
+    get_data().to_csv('data/'+args.tag,index=False)
 
 if (__name__ == '__main__'):
     main()
