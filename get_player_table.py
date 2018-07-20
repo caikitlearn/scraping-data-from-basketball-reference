@@ -36,7 +36,7 @@ def get_table(soup,tablename):
         return(OUT.loc[(OUT!='').apply(sum,axis=1).values!=0].reset_index(drop=True))
 
 def main():
-    print('import me to get tables from player pages')
+    pass
 
 if (__name__=='__main__'):
     main()
