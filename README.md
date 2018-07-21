@@ -13,4 +13,3 @@
   - Per 100 Poss: ``div_per_poss``
   - Advanced: ``div_advanced``
 - ``get_table()`` returns the corresponding table as a pandas DataFrame
-- ``main()`` does nothing
