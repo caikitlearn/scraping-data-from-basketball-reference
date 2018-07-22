@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from bs4 import BeautifulSoup
-from joblib import Parallel,delayed
 from datetime import datetime
+from joblib import Parallel,delayed
 
 import argparse
 import multiprocessing
