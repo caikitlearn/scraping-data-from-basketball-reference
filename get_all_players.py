@@ -60,6 +60,7 @@ def main():
     ap=arg_parser()
     args=ap.parse_args()
     get_data().to_csv('data/'+args.tag,index=False)
+    print('saved to data/'+args.tag)
 
 if (__name__ == '__main__'):
     main()
