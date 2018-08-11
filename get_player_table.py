@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-import requests
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
@@ -11,6 +8,12 @@ def clean_row(i,stats):
     return([left_margin]+[td.getText() for td in stats[i].find_all('td')])+['*' if (stats[i].find('span',class_='sr_star')!=None) else '']
 
 def get_table(soup,tablename):
+    '''
+    Retrieves a particular table on a player's page
+    PARAMS: soup: BeautifulSoup object for the player
+            tablename: html name of the table of interest
+    RETURNS: pandas DataFrame
+    '''
     # with the exception of the Per Game table, the tables are hiding under HTML comments
     init_search=soup.find_all('div',class_='overthrow table_container')[0] if (tablename=='div_per_game') else soup.find(text=re.compile(tablename))
 
