@@ -45,6 +45,11 @@ def send_request(letter):
         return(process_request(url_request))
 
 def get_data():
+    '''
+    Retrieves basic information for all players in Basketball-Reference
+    PARAMS:
+    RETURNS: pandas DataFrame with the basic information
+    '''
     num_cores=multiprocessing.cpu_count()
     alphabet=string.ascii_lowercase
     results=Parallel(n_jobs=num_cores)(delayed(send_request)(alphabet[i]) for i in range(len(alphabet)))
@@ -54,7 +59,17 @@ def get_data():
     for i in range(1,len(results)):
         OUT=pd.concat([OUT,pd.DataFrame(results[i])])
     OUT.columns=['Player','From','To','Pos','Ht','Wt','Birth Date','Colleges','url','is_active','in_hof']
-    return(OUT.reset_index(drop=True))
+    OUT=OUT.reset_index(drop=True)
+
+    # removing stray asterisks
+    OUT['Player']=OUT['Player'].str.strip('*')
+
+    # George Karl is missing his height for some reason
+    OUT.loc[OUT['Player']=='George Karl','Ht']='6-2'
+
+    # converting height to inches
+    OUT['Ht']=[int(fi[0])*12+int(fi[1]) for fi in (ht.split('-') for ht in OUT['Ht'])]
+    return(OUT)
 
 def main():
     ap=arg_parser()
