@@ -6,6 +6,11 @@ import sys
 from player_index import get_all_players
 
 def get_player_html(url):
+    '''
+    Retrieves the HTML for a given URL
+    PARAMS  url: string URL suffix
+    RETURN  html: bytes of the HTML for the requested page
+    '''
     html=None
     try:
         html=requests.get('https://www.basketball-reference.com'+url).content
@@ -17,8 +22,8 @@ def get_player_html(url):
 def get_all_html(all_players):
     '''
     Stores the HTML of every player on Basketball-Reference into a dictionary
-    PARAMS:
-    RETURNS: dictionary of all players with URL as keys and HTML as values
+    PARAMS  all_players: pandas DataFrame of basic information about players
+    RETURN  all_html: dictionary of all players with URL as keys and HTML as values
     '''
     n_players=all_players.shape[0]
 
@@ -34,11 +39,11 @@ def get_all_html(all_players):
 
 def main():
     # get a DataFrame of all players
-    all_players=get_data()
+    all_players=get_all_players()
 
     all_html=get_all_html(all_players)
     print('')
-    
+
     pickle.dump(all_html,open('data/all_html.pkl','wb'))
     print('saved to data/all_html.pkl')
 

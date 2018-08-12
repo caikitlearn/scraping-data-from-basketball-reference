@@ -16,6 +16,12 @@ def arg_parser():
     return(parser)
 
 def clean_row(i,stats):
+    '''
+    Prepares the data for player i
+    PARAMS  i: int indicating the current player
+            stats: BeautifulSoup of a player's basic information
+    RETURN  list of basic information
+    '''
     player_th=stats[i].find_all('th')[0]
     player_name=player_th.getText()
     player_stats=[td.getText() for td in stats[i].find_all('td')]
@@ -25,6 +31,11 @@ def clean_row(i,stats):
     return([player_name]+player_stats+[player_url,player_is_active,player_is_hof])
 
 def process_request(url_request):
+    '''
+    Takes a URL request and returns relevant basic information on the player
+    PARAMS  url_request: response of the URL requested
+    RETURN  out: list of basic information
+    '''
     html=url_request.content
     soup=BeautifulSoup(html,'lxml')
 
@@ -39,6 +50,11 @@ def process_request(url_request):
     return(out)
 
 def send_request(letter):
+    '''
+    Requests the players whose last names begin with a certain letter
+    PARAMS  letter: string of the letter being considered
+    RETURN  list of basic information on the player
+    '''
     url='https://www.basketball-reference.com/players/'+letter
     url_request=requests.get(url)
     if (url_request.status_code==200):
@@ -47,8 +63,8 @@ def send_request(letter):
 def get_all_players():
     '''
     Retrieves basic information for all players in Basketball-Reference
-    PARAMS:
-    RETURNS: pandas DataFrame with the basic information
+    PARAMS
+    RETURN  OUT: pandas DataFrame with the basic information
     '''
     num_cores=multiprocessing.cpu_count()
     alphabet=string.ascii_lowercase

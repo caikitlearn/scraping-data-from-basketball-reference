@@ -3,6 +3,12 @@ import re
 import pandas as pd
 
 def clean_row(i,stats):
+    '''
+    Prepares the data for player i
+    PARAMS  i: int indicating the current player
+            stats: BeautifulSoup of a player's stats
+    RETURN  list of stats
+    '''
     stats_all_a=stats[i].find_all('a')
     left_margin=stats[i].find_all('th')[0].getText() if (stats_all_a==[]) else stats_all_a[0].getText()
     return([left_margin]+[td.getText() for td in stats[i].find_all('td')])+['*' if (stats[i].find('span',class_='sr_star')!=None) else '']
@@ -10,9 +16,9 @@ def clean_row(i,stats):
 def get_table(soup,tablename):
     '''
     Retrieves a particular table on a player's page
-    PARAMS: soup: BeautifulSoup object for the player
+    PARAMS  soup: BeautifulSoup of a player's HTML
             tablename: html name of the table of interest
-    RETURNS: pandas DataFrame
+    RETURN  pandas DataFrame of the requested table
     '''
     # with the exception of the Per Game table, the tables are hiding under HTML comments
     init_search=soup.find_all('div',class_='overthrow table_container')[0] if (tablename=='div_per_game') else soup.find(text=re.compile(tablename))
