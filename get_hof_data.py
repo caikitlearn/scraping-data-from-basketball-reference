@@ -140,7 +140,7 @@ def get_leaderboard(soup):
             hof_pr=float(hof_panel.getText().split(' ')[1][0:-1])/100
     return(leaderboard_points,hof_pr)
 
-def get_hof_data(soup):
+def get_hof_data_row(soup):
     '''
     Retrieves all relevant HoF probability data for a particular player
     PARAMS  soup: BeautifulSoup of a player's HTML
@@ -151,6 +151,15 @@ def get_hof_data(soup):
     aba_years,nba_asg,peak_ws=get_adv_stats(soup)
     leaderboard_points,hof_pr=get_leaderboard(soup)
     return([career_games,career_win_shares,peak_ws,aba_years,n_chips,nba_asg,leaderboard_points,hof_as_player,hof_pr])
+
+def soup_helper(s):
+    '''
+    Converts HTML to BeautifulSoup and calls get_hof_data_row()
+    PARAMS  s: HTML of a player
+    RETURN  list of all relevant HoF data
+    '''
+    soup=BeautifulSoup(s,'lxml')
+    return(get_hof_data_row(soup))
 
 def get_hof_data():
     '''
@@ -166,7 +175,7 @@ def get_hof_data():
     print('')
 
     print('converting messy HTML to pandas DataFrame... ',end='')
-    multi_out=Parallel(n_jobs=num_cores)(delayed(get_hof_data_row)(BeautifulSoup(all_html[all_players.loc[i,'url']],'lxml')) for i in range(n_players))
+    multi_out=Parallel(n_jobs=num_cores)(delayed(soup_helper)(all_html[all_players.loc[i,'url']]) for i in range(n_players))
     print('done')
 
     hof_cols=pd.DataFrame(multi_out,columns=['career_games','career_win_shares','peak_ws','aba_years','n_chips','nba_asg','leaderboard_points','hof_as_player','hof_pr'])
