@@ -165,7 +165,7 @@ def get_hof_data():
     all_html=get_all_html(all_players)
     print('')
 
-    print('converting HTML to pandas DataFrame... ',end='')
+    print('converting messy HTML to pandas DataFrame... ',end='')
     multi_out=Parallel(n_jobs=num_cores)(delayed(get_hof_data_row)(BeautifulSoup(all_html[all_players.loc[i,'url']],'lxml')) for i in range(n_players))
     print('done')
 
