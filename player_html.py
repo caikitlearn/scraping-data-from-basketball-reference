@@ -3,7 +3,7 @@
 import requests
 import pickle
 import sys
-from get_all_players import get_data
+from player_index import get_all_players
 
 def get_player_html(url):
     html=None

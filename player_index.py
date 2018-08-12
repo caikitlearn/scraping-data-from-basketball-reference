@@ -44,7 +44,7 @@ def send_request(letter):
     if (url_request.status_code==200):
         return(process_request(url_request))
 
-def get_data():
+def get_all_players():
     '''
     Retrieves basic information for all players in Basketball-Reference
     PARAMS:
