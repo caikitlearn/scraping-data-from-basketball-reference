@@ -30,7 +30,6 @@ def get_all_html(all_players):
         all_html[url]=get_player_html(url)
         sys.stdout.write('\rprocessed player '+str(i+1)+' of '+str(n_players))
         sys.stdout.flush()
-    print('')
     return(all_html)
 
 def main():
@@ -38,6 +37,8 @@ def main():
     all_players=get_data()
 
     all_html=get_all_html(all_players)
+    print('')
+    
     pickle.dump(all_html,open('data/all_html.pkl','wb'))
     print('saved to data/all_html.pkl')
 
