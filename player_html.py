@@ -17,7 +17,7 @@ def get_player_html(url):
     # sometimes the request is refused if we are sending too many at a time
     except requests.exceptions.ConnectionError:
         print('Connection refused for: '+url)
-    return(html)
+    return html
 
 def get_all_html(all_players):
     '''
@@ -35,7 +35,7 @@ def get_all_html(all_players):
         all_html[url]=get_player_html(url)
         sys.stdout.write('\rprocessed player '+str(i+1)+' of '+str(n_players))
         sys.stdout.flush()
-    return(all_html)
+    return all_html
 
 def main():
     # get a DataFrame of all players
@@ -47,5 +47,5 @@ def main():
     pickle.dump(all_html,open('data/all_html.pkl','wb'))
     print('saved to data/all_html.pkl')
 
-if (__name__=='__main__'):
+if __name__=='__main__':
     main()

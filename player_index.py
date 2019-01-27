@@ -13,7 +13,7 @@ import string
 def arg_parser():
     parser=argparse.ArgumentParser(description='gathers a list all past and present NBA players from Basketball Reference')
     parser.add_argument('-t','--tag',default='all_players_'+datetime.today().strftime('%Y-%m-%d')+'.csv',help='filename for saved csv')
-    return(parser)
+    return parser
 
 def clean_row(i,stats):
     '''
@@ -28,7 +28,7 @@ def clean_row(i,stats):
     player_url=player_th.find_all('a')[0]['href'] if (len(player_th.find_all('a'))==1) else ''
     player_is_active=len(player_th.find_all('strong'))==1
     player_is_hof='*' in player_name
-    return([player_name]+player_stats+[player_url,player_is_active,player_is_hof])
+    return [player_name]+player_stats+[player_url,player_is_active,player_is_hof]
 
 def process_request(url_request):
     '''
@@ -47,7 +47,7 @@ def process_request(url_request):
     out=[]
     for i in range(len(stats)):
         out.append(clean_row(i,stats))
-    return(out)
+    return out
 
 def send_request(letter):
     '''
@@ -58,7 +58,7 @@ def send_request(letter):
     url='https://www.basketball-reference.com/players/'+letter
     url_request=requests.get(url)
     if (url_request.status_code==200):
-        return(process_request(url_request))
+        return process_request(url_request)
 
 def get_all_players():
     '''
@@ -85,13 +85,13 @@ def get_all_players():
 
     # converting height to inches
     OUT['Ht']=[int(fi[0])*12+int(fi[1]) for fi in (ht.split('-') for ht in OUT['Ht'])]
-    return(OUT)
+    return OUT
 
 def main():
     ap=arg_parser()
     args=ap.parse_args()
-    get_data().to_csv('data/'+args.tag,index=False)
+    get_all_players().to_csv('data/'+args.tag,index=False)
     print('saved to data/'+args.tag)
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     main()

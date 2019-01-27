@@ -38,7 +38,7 @@ def get_career_stats(soup):
         # if the player was inducted in the HoF as a player
         # this removes HoF coaches from the training data (rightfully so)
         hof_as_player=1*(soup.find(text=re.compile('Inducted as Player')) is not None)
-    return(career_games,career_win_shares,hof_as_player)
+    return career_games,career_win_shares,hof_as_player
 
 def get_n_chips(soup):
     '''
@@ -62,7 +62,7 @@ def get_n_chips(soup):
                 # the number of championships is styled as either Nx NBA Champ or yyyy-yy NBA Champ (1x NBA Champ)
                 champ_banner=b.split('x')
                 n_chips=int(champ_banner[0]) if (len(champ_banner)>1) else 1
-    return(n_chips)
+    return n_chips
 
 def get_adv_stats(soup):
     '''
@@ -104,7 +104,7 @@ def get_adv_stats(soup):
             # some players like Dan King do not have win shares recorded
             except ValueError:
                 peak_ws=None
-    return(aba_years,nba_asg,peak_ws)
+    return aba_years,nba_asg,peak_ws
 
 def get_leaderboard(soup):
     '''
@@ -138,7 +138,7 @@ def get_leaderboard(soup):
         if (hof_panel is not None):
             hof_panel=hof_panel.find('td')
             hof_pr=float(hof_panel.getText().split(' ')[1][0:-1])/100
-    return(leaderboard_points,hof_pr)
+    return leaderboard_points,hof_pr
 
 def get_hof_data_row(soup):
     '''
@@ -150,7 +150,7 @@ def get_hof_data_row(soup):
     n_chips=get_n_chips(soup)
     aba_years,nba_asg,peak_ws=get_adv_stats(soup)
     leaderboard_points,hof_pr=get_leaderboard(soup)
-    return([career_games,career_win_shares,peak_ws,aba_years,n_chips,nba_asg,leaderboard_points,hof_as_player,hof_pr])
+    return [career_games,career_win_shares,peak_ws,aba_years,n_chips,nba_asg,leaderboard_points,hof_as_player,hof_pr]
 
 def soup_helper(s):
     '''
@@ -159,7 +159,7 @@ def soup_helper(s):
     RETURN  list of all relevant HoF data
     '''
     soup=BeautifulSoup(s,'lxml')
-    return(get_hof_data_row(soup))
+    return get_hof_data_row(soup)
 
 def get_hof_data():
     '''
@@ -180,12 +180,12 @@ def get_hof_data():
 
     hof_cols=pd.DataFrame(multi_out,columns=['career_games','career_win_shares','peak_ws','aba_years','n_chips','nba_asg','leaderboard_points','hof_as_player','hof_pr'])
     hof_data=pd.concat([all_players,hof_cols],axis=1)
-    return(hof_data)
+    return hof_data
 
 def main():
     hof_data=get_hof_data()
     hof_data.to_csv('data/hof.csv',index=False)
     print('saved to data/hof.csv')
 
-if (__name__=='__main__'):
+if __name__=='__main__':
     main()

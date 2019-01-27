@@ -11,7 +11,7 @@ def clean_row(i,stats):
     '''
     stats_all_a=stats[i].find_all('a')
     left_margin=stats[i].find_all('th')[0].getText() if (stats_all_a==[]) else stats_all_a[0].getText()
-    return([left_margin]+[td.getText() for td in stats[i].find_all('td')])+['*' if (stats[i].find('span',class_='sr_star')!=None) else '']
+    return [left_margin]+[td.getText() for td in stats[i].find_all('td')]+['*' if (stats[i].find('span',class_='sr_star')!=None) else '']
 
 def get_table(soup,tablename):
     '''
@@ -24,7 +24,7 @@ def get_table(soup,tablename):
     init_search=soup.find_all('div',class_='overthrow table_container')[0] if (tablename=='div_per_game') else soup.find(text=re.compile(tablename))
 
     if (init_search==None):
-        return(None)
+        return None
     else:
         table_soup=BeautifulSoup(init_search,'lxml') if (tablename!='div_per_game') else init_search
 
@@ -42,4 +42,4 @@ def get_table(soup,tablename):
         OUT=pd.DataFrame([clean_row(i,stats) for i in range(len(stats))])
         OUT.columns=colnames
         # remove empty rows
-        return(OUT.loc[(OUT!='').apply(sum,axis=1).values!=0].reset_index(drop=True))
+        return OUT.loc[(OUT!='').apply(sum,axis=1).values!=0].reset_index(drop=True)
